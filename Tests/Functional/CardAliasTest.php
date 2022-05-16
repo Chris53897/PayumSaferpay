@@ -5,13 +5,16 @@ namespace Karser\PayumSaferpay\Tests\Functional;
 use Karser\PayumSaferpay\Constants;
 use Karser\PayumSaferpay\Request\Api\DeleteAlias;
 use Payum\Core\Reply\HttpRedirect;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 class CardAliasTest extends AbstractSaferpayTest
 {
+    use ArraySubsetAsserts;
+
     /**
      * @test
      */
-    public function insertAlias()
+    public function insertAlias(): void
     {
         $cardAlias = $this->createCardAlias([
             'Alias' => [
@@ -33,8 +36,8 @@ class CardAliasTest extends AbstractSaferpayTest
         $iframeRedirect = $this->getThroughCheckout($reply->getUrl(), $formData = $this->composeFormData(self::CARD_SUCCESS, $cvc = false));
 
         self::assertStringStartsWith(self::HOST, $iframeRedirect);
-        self::assertContains('payum_token='.$token->getHash(), $iframeRedirect);
-        self::assertContains('success=1', $iframeRedirect);
+        self::assertStringContainsString('payum_token='.$token->getHash(), $iframeRedirect);
+        self::assertStringContainsString('success=1', $iframeRedirect);
         parse_str(parse_url($iframeRedirect, PHP_URL_QUERY), $_GET);
 
         $this->insertCardAlias($token, $cardAlias);
@@ -60,7 +63,7 @@ class CardAliasTest extends AbstractSaferpayTest
     /**
      * @test
      */
-    public function deleteAlias()
+    public function deleteAlias(): void
     {
         $cardAlias = $this->createInsertedCardAlias([]);
         self::assertNotNull($cardAlias->getDetails()['Alias']['Id']);

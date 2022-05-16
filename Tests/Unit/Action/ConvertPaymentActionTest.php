@@ -9,9 +9,11 @@ use Payum\Core\Model\PaymentInterface;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\Generic;
 use Payum\Core\Tests\GenericActionTest;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 class ConvertPaymentActionTest extends GenericActionTest
 {
+    use ArraySubsetAsserts;
     protected $requestClass = Convert::class;
     protected $actionClass = ConvertPaymentAction::class;
 
@@ -56,7 +58,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
+    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack(): void
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
@@ -93,7 +95,7 @@ class ConvertPaymentActionTest extends GenericActionTest
     /**
      * @test
      */
-    public function shouldNotOverwriteAlreadySetExtraDetails()
+    public function shouldNotOverwriteAlreadySetExtraDetails(): void
     {
         $payment = new Payment();
         $payment->setNumber('theNumber');
